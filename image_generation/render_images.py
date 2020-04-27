@@ -373,6 +373,15 @@ def render_scene(
     # contains the actual ground plane.
     utils.delete_object(plane)
 
+    scene_struct['camera_params'] = {}
+    scene_struct['camera_params']['position'] = list(camera.location)
+    cam_rot = [np.rad2deg(x) for x in list(camera.rotation_euler)]
+    scene_struct['camera_params']['rotation'] = cam_rot
+    scene_struct['camera_params']['rotation_mode'] = 'EulerXYZ'
+    # print(scene_struct['camera_params'])
+
+    # exit()
+
     # Save all six axis-aligned directions in the scene struct
     scene_struct['directions']['behind'] = tuple(plane_behind)
     scene_struct['directions']['front'] = tuple(-plane_behind)
@@ -506,6 +515,10 @@ def add_random_objects(scene_struct, num_objects, args, camera):
 
             dists_good = not utils.check_intersection_list(pos_temp, size_temp, args.min_dist)
 
+            w = boxes[obj_name]['w'] * r
+            h = boxes[obj_name]['h'] * r
+            bbox = utils.get_bbox_coords(x, y, theta, w, h)
+
             if dists_good and margins_good:
                 break
 
@@ -550,6 +563,7 @@ def add_random_objects(scene_struct, num_objects, args, camera):
         shape = object_properties[obj_name]['shape']
 
         objects.append({
+            'file': obj_name,
             'name': obj_name_out,
             'shape': shape,
             'size': size_name,
@@ -559,7 +573,9 @@ def add_random_objects(scene_struct, num_objects, args, camera):
             'pixel_coords': pixel_coords,
             'color': color_name,
             'weight': weight,
-            'movability': movability
+            'movability': movability,
+            'bbox': bbox,
+            'scale_factor': r
         })
 
     # Check that all objects are at least partially visible in the rendered image

@@ -313,6 +313,25 @@ def check_intersection_list(centres_list, size_list, margin):
     return False
 
 
+def get_bbox_coords(centre_x, centre_y, theta, w, h):
+    corners = []
+    corners_local = [
+        [w / 2, h / 2],
+        [-w / 2, h / 2],
+        [-w / 2, -h / 2],
+        [w / 2, -h / 2]
+    ]
+    theta = math.radians(theta)
+    for c in corners_local:
+        x_glob = c[0] * math.cos(theta) - c[1] * math.sin(theta)
+        x_glob += centre_x
+        y_glob = c[0] * math.sin(theta) + c[1] * math.cos(theta)
+        y_glob += centre_y
+        corners.append([x_glob, y_glob])
+
+    return corners
+
+
 def check_intersection(box1, box2):
     """ Check intersection between 2 bounding boxes """
     boxes = [box1, box2]
