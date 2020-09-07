@@ -62,7 +62,7 @@
 	"metal": "Metal"
   },
   "sizes": {
-    "bigger": 0.6,
-	"smaller": 0.45
+    "bigger": 0.06,
+	"smaller": 0.045
   }
 }

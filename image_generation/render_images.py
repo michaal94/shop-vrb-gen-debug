@@ -391,6 +391,7 @@ def render_scene(
     scene_struct['directions']['below'] = tuple(-plane_up)
 
     material = random.choice(grounds)
+    material = None
     if material is not None:
         utils.add_ground(material)
 
@@ -458,6 +459,9 @@ def add_random_objects(scene_struct, num_objects, args, camera):
     for i in range(num_objects):
         # Choose random color and shape
         obj_name, obj_name_out = random.choice(object_mapping)
+        if i == 0:
+            obj_name = 'soda_can'
+            obj_name_out = 'soda_can'
         color_name, rgba = random.choice(list(color_name_to_rgba.items()))
 
         # Choose a random size
@@ -561,6 +565,13 @@ def add_random_objects(scene_struct, num_objects, args, camera):
         weight = object_properties[obj_name]['weight']
         movability = object_properties[obj_name]['movability']
         shape = object_properties[obj_name]['shape']
+
+        x, y, z = obj.dimensions
+        bbox = {
+            'x': x,
+            'y': y,
+            'z': z
+        }
 
         objects.append({
             'file': obj_name,
